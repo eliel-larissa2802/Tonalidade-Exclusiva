@@ -1,34 +1,43 @@
-const questions = document.querySelectorAll(".faq-btn");
-// Adicione isso ao seu script.js existente
+// SCROLL INDICATOR
 window.addEventListener('scroll', function() {
   const indicator = document.querySelector('.scroll-indicator');
-  
   if (indicator) {
-    // window.scrollY detecta quantos pixels a página já subiu
-    if (window.scrollY > 20) { 
-      // Quando rolar mais de 20px, ele começa a sumir
+    if (window.scrollY > 30) {
       indicator.style.opacity = '0';
       indicator.style.visibility = 'hidden';
-      indicator.style.transition = 'opacity 0.5s ease, visibility 0.5s';
     } else {
-      // Quando voltar para o topo, ele reaparece
       indicator.style.opacity = '1';
       indicator.style.visibility = 'visible';
     }
   }
 });
 
-questions.forEach(q => {
-  q.addEventListener("click", () => {
-    const answer = q.nextElementSibling;
-    const icon = q.querySelector(".icon");
+// FAQ - Accordion corrigido (inicia oculto e alterna corretamente)
+const questions = document.querySelectorAll(".faq-btn");
 
-    // Fecha/Abre e rotaciona o ícone
-    if (answer.style.display === "block") {
-      answer.style.display = "none";
+questions.forEach(q => {
+  const answer = q.nextElementSibling;
+  const icon = q.querySelector(".icon");
+  const faqItem = q.parentElement;
+
+  // Garante que todas as respostas iniciem ocultas
+  answer.style.maxHeight = "0px";
+  answer.style.overflow = "hidden";
+  answer.style.transition = "max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1)";
+  icon.style.transform = "rotate(0deg)";
+
+  q.addEventListener("click", () => {
+    if (faqItem.classList.contains("active")) {
+      // Fecha
+      answer.style.maxHeight = "0px";
       icon.style.transform = "rotate(0deg)";
+      setTimeout(() => {
+        faqItem.classList.remove("active");
+      }, 500);
     } else {
-      answer.style.display = "block";
+      // Abre
+      faqItem.classList.add("active");
+      answer.style.maxHeight = answer.scrollHeight + "px";
       icon.style.transform = "rotate(45deg)";
     }
   });
